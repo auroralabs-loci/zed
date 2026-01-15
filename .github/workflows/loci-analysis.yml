@@ -23,19 +23,33 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Patch gemm to disable f16
+        run: |
+          cat >> Cargo.toml << 'EOF'
+
+          [patch.crates-io.gemm]
+          git = "https://github.com/sarah-quinones/gemm"
+          default-features = false
+          features = ["std", "rayon"]
+          EOF
+        shell: bash -euo pipefail {0}
+
       - name: Install dependencies
         run: ./script/linux
+        shell: bash -euo pipefail {0}
 
       - name: Install Rust
         run: |
           curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
           echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+        shell: bash -euo pipefail {0}
 
       - name: Build
         run: |
           cargo build --package zed --package cli --package remote_server
           ls target/*
-        
+        shell: bash -euo pipefail {0}
+
       - name: Upload
         uses: auroralabs-loci/loci-action@v1
         with:
