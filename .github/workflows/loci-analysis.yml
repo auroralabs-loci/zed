@@ -14,7 +14,7 @@ jobs:
       LOCI_PROJECT: zed
       LOCI_API_KEY: '${{ secrets.LOCI_API_KEY }}'
       LOCI_BACKEND_URL: '${{ vars.LOCI_BACKEND_URL }}'
-      RUSTFLAGS: "-C target-feature=+fp16,+fhm"
+      RUSTFLAGS: "-C target-cpu=neoverse-n1" 
 
     environment: ${{ vars.LOCI_ENV || 'PROD__AL_DEMO' }}
 
